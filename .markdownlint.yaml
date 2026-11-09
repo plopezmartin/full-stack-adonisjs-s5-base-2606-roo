@@ -1,0 +1,14 @@
+# Reglas activas
+default: true
+
+# Desactivar las que no aplican al proyecto
+MD013: false   # line-length — los bloques de código pueden ser largos
+MD033: false   # no-inline-html — Starlight usa MDX con JSX
+MD041: false   # first-line-heading — algunos MDX tienen frontmatter sin H1
+
+# Personalizar
+MD024:         # no-duplicate-heading
+  siblings_only: true  # Solo chequea headings al mismo nivel
+
+MD007:         # unordered-list-indent
+  indent: 2    # Indentación de 2 espacios en listas

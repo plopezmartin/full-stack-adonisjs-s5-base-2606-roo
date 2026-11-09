@@ -1,0 +1,12 @@
+{
+  "entryPoints": ["app/controllers"],
+  "entryPointStrategy": "expand",
+  "out": "docs/api-reference",
+  "excludePrivate": true,
+  "excludeInternal": true,
+  "includeVersion": true,
+  "readme": "none",
+  "navigationLinks": {
+    "Repositorio": "<https://github.com/plopezmartin/full-stack-adonisjs-s5-base-2606-roo>"
+  }
+}

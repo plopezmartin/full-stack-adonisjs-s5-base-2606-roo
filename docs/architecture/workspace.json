@@ -1,0 +1,530 @@
+{
+  "configuration" : { },
+  "description" : "Starter kit full-stack con autenticación por access tokens (AI4Devs).",
+  "documentation" : { },
+  "id" : 1,
+  "lastModifiedDate" : "2026-11-08T18:48:12Z",
+  "model" : {
+    "people" : [ {
+      "description" : "Persona que se registra, inicia sesión y consulta el dashboard.",
+      "id" : "1",
+      "name" : "Usuario",
+      "properties" : {
+        "structurizr.dsl.identifier" : "user"
+      },
+      "relationships" : [ {
+        "description" : "Usa",
+        "destinationId" : "3",
+        "id" : "17",
+        "sourceId" : "1",
+        "tags" : "Relationship",
+        "technology" : "HTTPS (navegador)"
+      }, {
+        "description" : "Usa",
+        "destinationId" : "2",
+        "id" : "18",
+        "linkedRelationshipId" : "17",
+        "sourceId" : "1",
+        "technology" : "HTTPS (navegador)"
+      } ],
+      "tags" : "Element,Person"
+    } ],
+    "softwareSystems" : [ {
+      "containers" : [ {
+        "description" : "Login, registro y dashboard protegido. Guarda el token en localStorage.",
+        "documentation" : { },
+        "id" : "3",
+        "name" : "Frontend SPA",
+        "properties" : {
+          "structurizr.dsl.identifier" : "system.spa"
+        },
+        "relationships" : [ {
+          "description" : "Llama a la API",
+          "destinationId" : "4",
+          "id" : "19",
+          "sourceId" : "3",
+          "tags" : "Relationship",
+          "technology" : "JSON/HTTP, Authorization: Bearer"
+        }, {
+          "description" : "Peticiones /api/v1",
+          "destinationId" : "5",
+          "id" : "21",
+          "sourceId" : "3",
+          "tags" : "Relationship",
+          "technology" : "JSON/HTTP"
+        } ],
+        "tags" : "Element,Container,Web Browser",
+        "technology" : "React 19, TypeScript, Vite, React Router, Tailwind v4, shadcn/ui"
+      }, {
+        "components" : [ {
+          "description" : "Solo cablea rutas /api/v1 y aplica middleware.auth() a las protegidas.",
+          "documentation" : { },
+          "id" : "5",
+          "name" : "Routes",
+          "properties" : {
+            "structurizr.dsl.identifier" : "system.api.routes"
+          },
+          "relationships" : [ {
+            "description" : "Atraviesa",
+            "destinationId" : "6",
+            "id" : "22",
+            "sourceId" : "5",
+            "tags" : "Relationship"
+          }, {
+            "description" : "Rutas protegidas",
+            "destinationId" : "7",
+            "id" : "23",
+            "sourceId" : "5",
+            "tags" : "Relationship"
+          }, {
+            "description" : "Delega",
+            "destinationId" : "8",
+            "id" : "25",
+            "sourceId" : "5",
+            "tags" : "Relationship"
+          }, {
+            "description" : "Delega",
+            "destinationId" : "9",
+            "id" : "26",
+            "sourceId" : "5",
+            "tags" : "Relationship"
+          }, {
+            "description" : "Delega",
+            "destinationId" : "10",
+            "id" : "27",
+            "sourceId" : "5",
+            "tags" : "Relationship"
+          }, {
+            "description" : "Delega",
+            "destinationId" : "11",
+            "id" : "28",
+            "sourceId" : "5",
+            "tags" : "Relationship"
+          }, {
+            "description" : "Delega",
+            "destinationId" : "12",
+            "id" : "29",
+            "sourceId" : "5",
+            "tags" : "Relationship"
+          } ],
+          "tags" : "Element,Component",
+          "technology" : "start/routes.ts"
+        }, {
+          "description" : "ForceJsonResponse, CORS, BodyParser, InitializeAuth, ContainerBindings.",
+          "documentation" : { },
+          "id" : "6",
+          "name" : "HTTP Middleware",
+          "properties" : {
+            "structurizr.dsl.identifier" : "system.api.httpMw"
+          },
+          "tags" : "Element,Component",
+          "technology" : "app/middleware, start/kernel.ts"
+        }, {
+          "description" : "Valida Authorization: Bearer <token> con el guard api.",
+          "documentation" : { },
+          "id" : "7",
+          "name" : "Auth Middleware",
+          "properties" : {
+            "structurizr.dsl.identifier" : "system.api.authMw"
+          },
+          "relationships" : [ {
+            "description" : "Resuelve usuario por token",
+            "destinationId" : "15",
+            "id" : "24",
+            "sourceId" : "7",
+            "tags" : "Relationship"
+          } ],
+          "tags" : "Element,Component",
+          "technology" : "app/middleware/auth_middleware.ts"
+        }, {
+          "description" : "GET /health (liveness).",
+          "documentation" : { },
+          "id" : "8",
+          "name" : "HealthController",
+          "properties" : {
+            "structurizr.dsl.identifier" : "system.api.healthCtl"
+          },
+          "tags" : "Element,Component",
+          "technology" : "Controller"
+        }, {
+          "description" : "POST /account/register.",
+          "documentation" : { },
+          "id" : "9",
+          "name" : "NewAccountsController",
+          "properties" : {
+            "structurizr.dsl.identifier" : "system.api.newAccountsCtl"
+          },
+          "relationships" : [ {
+            "description" : "Valida input",
+            "destinationId" : "13",
+            "id" : "30",
+            "sourceId" : "9",
+            "tags" : "Relationship"
+          }, {
+            "description" : "Crea usuario y token",
+            "destinationId" : "15",
+            "id" : "32",
+            "sourceId" : "9",
+            "tags" : "Relationship"
+          }, {
+            "description" : "Serializa",
+            "destinationId" : "14",
+            "id" : "37",
+            "sourceId" : "9",
+            "tags" : "Relationship"
+          } ],
+          "tags" : "Element,Component",
+          "technology" : "Controller"
+        }, {
+          "description" : "POST /account/login y /account/logout.",
+          "documentation" : { },
+          "id" : "10",
+          "name" : "AccessTokensController",
+          "properties" : {
+            "structurizr.dsl.identifier" : "system.api.accessTokensCtl"
+          },
+          "relationships" : [ {
+            "description" : "Valida input",
+            "destinationId" : "13",
+            "id" : "31",
+            "sourceId" : "10",
+            "tags" : "Relationship"
+          }, {
+            "description" : "Verifica credenciales, emite/revoca token",
+            "destinationId" : "15",
+            "id" : "33",
+            "sourceId" : "10",
+            "tags" : "Relationship"
+          }, {
+            "description" : "Serializa",
+            "destinationId" : "14",
+            "id" : "38",
+            "sourceId" : "10",
+            "tags" : "Relationship"
+          } ],
+          "tags" : "Element,Component",
+          "technology" : "Controller"
+        }, {
+          "description" : "GET /account/profile.",
+          "documentation" : { },
+          "id" : "11",
+          "name" : "ProfilesController",
+          "properties" : {
+            "structurizr.dsl.identifier" : "system.api.profilesCtl"
+          },
+          "relationships" : [ {
+            "description" : "Serializa",
+            "destinationId" : "14",
+            "id" : "34",
+            "sourceId" : "11",
+            "tags" : "Relationship"
+          } ],
+          "tags" : "Element,Component",
+          "technology" : "Controller"
+        }, {
+          "description" : "GET /users y /users/:id.",
+          "documentation" : { },
+          "id" : "12",
+          "name" : "UsersController",
+          "properties" : {
+            "structurizr.dsl.identifier" : "system.api.usersCtl"
+          },
+          "relationships" : [ {
+            "description" : "Consulta",
+            "destinationId" : "15",
+            "id" : "35",
+            "sourceId" : "12",
+            "tags" : "Relationship"
+          }, {
+            "description" : "Serializa",
+            "destinationId" : "14",
+            "id" : "36",
+            "sourceId" : "12",
+            "tags" : "Relationship"
+          } ],
+          "tags" : "Element,Component",
+          "technology" : "Controller"
+        }, {
+          "description" : "signupValidator y loginValidator.",
+          "documentation" : { },
+          "id" : "13",
+          "name" : "Validators",
+          "properties" : {
+            "structurizr.dsl.identifier" : "system.api.validators"
+          },
+          "tags" : "Element,Component",
+          "technology" : "VineJS, app/validators/auth.ts"
+        }, {
+          "description" : "Único contrato de salida del usuario (excluye password).",
+          "documentation" : { },
+          "id" : "14",
+          "name" : "UserTransformer",
+          "properties" : {
+            "structurizr.dsl.identifier" : "system.api.transformer"
+          },
+          "tags" : "Element,Component",
+          "technology" : "app/transformers"
+        }, {
+          "description" : "Entidad User + AuthFinder (scrypt) + DbAccessTokensProvider (30 días, prefijo oat_).",
+          "documentation" : { },
+          "id" : "15",
+          "name" : "User model",
+          "properties" : {
+            "structurizr.dsl.identifier" : "system.api.userModel"
+          },
+          "relationships" : [ {
+            "description" : "Lee y escribe",
+            "destinationId" : "16",
+            "id" : "39",
+            "sourceId" : "15",
+            "tags" : "Relationship",
+            "technology" : "Lucid / SQL"
+          } ],
+          "tags" : "Element,Component",
+          "technology" : "Lucid ORM"
+        } ],
+        "description" : "API JSON REST bajo /api/v1. Autenticación Bearer (guard api).",
+        "documentation" : { },
+        "id" : "4",
+        "name" : "Backend API",
+        "properties" : {
+          "structurizr.dsl.identifier" : "system.api"
+        },
+        "relationships" : [ {
+          "description" : "Lee y escribe",
+          "destinationId" : "16",
+          "id" : "20",
+          "sourceId" : "4",
+          "tags" : "Relationship",
+          "technology" : "Lucid / SQL"
+        } ],
+        "tags" : "Element,Container",
+        "technology" : "AdonisJS 7, TypeScript"
+      }, {
+        "description" : "Tablas users y auth_access_tokens (ver ADR SQLite).",
+        "documentation" : { },
+        "id" : "16",
+        "name" : "Base de datos",
+        "properties" : {
+          "structurizr.dsl.identifier" : "system.db"
+        },
+        "tags" : "Element,Container,Database",
+        "technology" : "SQLite (better-sqlite3), backend/tmp/db.sqlite3"
+      } ],
+      "description" : "Registro, login por access tokens y consulta de usuarios.",
+      "documentation" : { },
+      "id" : "2",
+      "name" : "Starter Kit Full-stack",
+      "properties" : {
+        "structurizr.dsl.identifier" : "system"
+      },
+      "tags" : "Element,Software System"
+    } ]
+  },
+  "name" : "Full-stack AdonisJS Starter Kit",
+  "properties" : {
+    "structurizr.inspection.error" : "20",
+    "structurizr.dsl" : "d29ya3NwYWNlICJGdWxsLXN0YWNrIEFkb25pc0pTIFN0YXJ0ZXIgS2l0IiAiU3RhcnRlciBraXQgZnVsbC1zdGFjayBjb24gYXV0ZW50aWNhY2nDs24gcG9yIGFjY2VzcyB0b2tlbnMgKEFJNERldnMpLiIgewoKICAgICFpZGVudGlmaWVycyBoaWVyYXJjaGljYWwKCiAgICBtb2RlbCB7CiAgICAgICAgdXNlciA9IHBlcnNvbiAiVXN1YXJpbyIgIlBlcnNvbmEgcXVlIHNlIHJlZ2lzdHJhLCBpbmljaWEgc2VzacOzbiB5IGNvbnN1bHRhIGVsIGRhc2hib2FyZC4iCgogICAgICAgIHN5c3RlbSA9IHNvZnR3YXJlU3lzdGVtICJTdGFydGVyIEtpdCBGdWxsLXN0YWNrIiAiUmVnaXN0cm8sIGxvZ2luIHBvciBhY2Nlc3MgdG9rZW5zIHkgY29uc3VsdGEgZGUgdXN1YXJpb3MuIiB7CgogICAgICAgICAgICBzcGEgPSBjb250YWluZXIgIkZyb250ZW5kIFNQQSIgIkxvZ2luLCByZWdpc3RybyB5IGRhc2hib2FyZCBwcm90ZWdpZG8uIEd1YXJkYSBlbCB0b2tlbiBlbiBsb2NhbFN0b3JhZ2UuIiAiUmVhY3QgMTksIFR5cGVTY3JpcHQsIFZpdGUsIFJlYWN0IFJvdXRlciwgVGFpbHdpbmQgdjQsIHNoYWRjbi91aSIgIldlYiBCcm93c2VyIgoKICAgICAgICAgICAgYXBpID0gY29udGFpbmVyICJCYWNrZW5kIEFQSSIgIkFQSSBKU09OIFJFU1QgYmFqbyAvYXBpL3YxLiBBdXRlbnRpY2FjacOzbiBCZWFyZXIgKGd1YXJkIGFwaSkuIiAiQWRvbmlzSlMgNywgVHlwZVNjcmlwdCIgewogICAgICAgICAgICAgICAgcm91dGVzID0gY29tcG9uZW50ICJSb3V0ZXMiICJTb2xvIGNhYmxlYSBydXRhcyAvYXBpL3YxIHkgYXBsaWNhIG1pZGRsZXdhcmUuYXV0aCgpIGEgbGFzIHByb3RlZ2lkYXMuIiAic3RhcnQvcm91dGVzLnRzIgogICAgICAgICAgICAgICAgaHR0cE13ID0gY29tcG9uZW50ICJIVFRQIE1pZGRsZXdhcmUiICJGb3JjZUpzb25SZXNwb25zZSwgQ09SUywgQm9keVBhcnNlciwgSW5pdGlhbGl6ZUF1dGgsIENvbnRhaW5lckJpbmRpbmdzLiIgImFwcC9taWRkbGV3YXJlLCBzdGFydC9rZXJuZWwudHMiCiAgICAgICAgICAgICAgICBhdXRoTXcgPSBjb21wb25lbnQgIkF1dGggTWlkZGxld2FyZSIgIlZhbGlkYSBBdXRob3JpemF0aW9uOiBCZWFyZXIgPHRva2VuPiBjb24gZWwgZ3VhcmQgYXBpLiIgImFwcC9taWRkbGV3YXJlL2F1dGhfbWlkZGxld2FyZS50cyIKICAgICAgICAgICAgICAgIGhlYWx0aEN0bCA9IGNvbXBvbmVudCAiSGVhbHRoQ29udHJvbGxlciIgIkdFVCAvaGVhbHRoIChsaXZlbmVzcykuIiAiQ29udHJvbGxlciIKICAgICAgICAgICAgICAgIG5ld0FjY291bnRzQ3RsID0gY29tcG9uZW50ICJOZXdBY2NvdW50c0NvbnRyb2xsZXIiICJQT1NUIC9hY2NvdW50L3JlZ2lzdGVyLiIgIkNvbnRyb2xsZXIiCiAgICAgICAgICAgICAgICBhY2Nlc3NUb2tlbnNDdGwgPSBjb21wb25lbnQgIkFjY2Vzc1Rva2Vuc0NvbnRyb2xsZXIiICJQT1NUIC9hY2NvdW50L2xvZ2luIHkgL2FjY291bnQvbG9nb3V0LiIgIkNvbnRyb2xsZXIiCiAgICAgICAgICAgICAgICBwcm9maWxlc0N0bCA9IGNvbXBvbmVudCAiUHJvZmlsZXNDb250cm9sbGVyIiAiR0VUIC9hY2NvdW50L3Byb2ZpbGUuIiAiQ29udHJvbGxlciIKICAgICAgICAgICAgICAgIHVzZXJzQ3RsID0gY29tcG9uZW50ICJVc2Vyc0NvbnRyb2xsZXIiICJHRVQgL3VzZXJzIHkgL3VzZXJzLzppZC4iICJDb250cm9sbGVyIgogICAgICAgICAgICAgICAgdmFsaWRhdG9ycyA9IGNvbXBvbmVudCAiVmFsaWRhdG9ycyIgInNpZ251cFZhbGlkYXRvciB5IGxvZ2luVmFsaWRhdG9yLiIgIlZpbmVKUywgYXBwL3ZhbGlkYXRvcnMvYXV0aC50cyIKICAgICAgICAgICAgICAgIHRyYW5zZm9ybWVyID0gY29tcG9uZW50ICJVc2VyVHJhbnNmb3JtZXIiICLDmm5pY28gY29udHJhdG8gZGUgc2FsaWRhIGRlbCB1c3VhcmlvIChleGNsdXllIHBhc3N3b3JkKS4iICJhcHAvdHJhbnNmb3JtZXJzIgogICAgICAgICAgICAgICAgdXNlck1vZGVsID0gY29tcG9uZW50ICJVc2VyIG1vZGVsIiAiRW50aWRhZCBVc2VyICsgQXV0aEZpbmRlciAoc2NyeXB0KSArIERiQWNjZXNzVG9rZW5zUHJvdmlkZXIgKDMwIGTDrWFzLCBwcmVmaWpvIG9hdF8pLiIgIkx1Y2lkIE9STSIKICAgICAgICAgICAgfQoKICAgICAgICAgICAgZGIgPSBjb250YWluZXIgIkJhc2UgZGUgZGF0b3MiICJUYWJsYXMgdXNlcnMgeSBhdXRoX2FjY2Vzc190b2tlbnMgKHZlciBBRFIgU1FMaXRlKS4iICJTUUxpdGUgKGJldHRlci1zcWxpdGUzKSwgYmFja2VuZC90bXAvZGIuc3FsaXRlMyIgIkRhdGFiYXNlIgogICAgICAgIH0KCiAgICAgICAgdXNlciAtPiBzeXN0ZW0uc3BhICJVc2EiICJIVFRQUyAobmF2ZWdhZG9yKSIKICAgICAgICBzeXN0ZW0uc3BhIC0+IHN5c3RlbS5hcGkgIkxsYW1hIGEgbGEgQVBJIiAiSlNPTi9IVFRQLCBBdXRob3JpemF0aW9uOiBCZWFyZXIiCiAgICAgICAgc3lzdGVtLmFwaSAtPiBzeXN0ZW0uZGIgIkxlZSB5IGVzY3JpYmUiICJMdWNpZCAvIFNRTCIKCiAgICAgICAgIyBOaXZlbCAzOiBjb21wb25lbnRlcyBkZWwgYmFja2VuZAogICAgICAgIHN5c3RlbS5zcGEgLT4gc3lzdGVtLmFwaS5yb3V0ZXMgIlBldGljaW9uZXMgL2FwaS92MSIgIkpTT04vSFRUUCIKICAgICAgICBzeXN0ZW0uYXBpLnJvdXRlcyAtPiBzeXN0ZW0uYXBpLmh0dHBNdyAiQXRyYXZpZXNhIgogICAgICAgIHN5c3RlbS5hcGkucm91dGVzIC0+IHN5c3RlbS5hcGkuYXV0aE13ICJSdXRhcyBwcm90ZWdpZGFzIgogICAgICAgIHN5c3RlbS5hcGkuYXV0aE13IC0+IHN5c3RlbS5hcGkudXNlck1vZGVsICJSZXN1ZWx2ZSB1c3VhcmlvIHBvciB0b2tlbiIKICAgICAgICBzeXN0ZW0uYXBpLnJvdXRlcyAtPiBzeXN0ZW0uYXBpLmhlYWx0aEN0bCAiRGVsZWdhIgogICAgICAgIHN5c3RlbS5hcGkucm91dGVzIC0+IHN5c3RlbS5hcGkubmV3QWNjb3VudHNDdGwgIkRlbGVnYSIKICAgICAgICBzeXN0ZW0uYXBpLnJvdXRlcyAtPiBzeXN0ZW0uYXBpLmFjY2Vzc1Rva2Vuc0N0bCAiRGVsZWdhIgogICAgICAgIHN5c3RlbS5hcGkucm91dGVzIC0+IHN5c3RlbS5hcGkucHJvZmlsZXNDdGwgIkRlbGVnYSIKICAgICAgICBzeXN0ZW0uYXBpLnJvdXRlcyAtPiBzeXN0ZW0uYXBpLnVzZXJzQ3RsICJEZWxlZ2EiCiAgICAgICAgc3lzdGVtLmFwaS5uZXdBY2NvdW50c0N0bCAtPiBzeXN0ZW0uYXBpLnZhbGlkYXRvcnMgIlZhbGlkYSBpbnB1dCIKICAgICAgICBzeXN0ZW0uYXBpLmFjY2Vzc1Rva2Vuc0N0bCAtPiBzeXN0ZW0uYXBpLnZhbGlkYXRvcnMgIlZhbGlkYSBpbnB1dCIKICAgICAgICBzeXN0ZW0uYXBpLm5ld0FjY291bnRzQ3RsIC0+IHN5c3RlbS5hcGkudXNlck1vZGVsICJDcmVhIHVzdWFyaW8geSB0b2tlbiIKICAgICAgICBzeXN0ZW0uYXBpLmFjY2Vzc1Rva2Vuc0N0bCAtPiBzeXN0ZW0uYXBpLnVzZXJNb2RlbCAiVmVyaWZpY2EgY3JlZGVuY2lhbGVzLCBlbWl0ZS9yZXZvY2EgdG9rZW4iCiAgICAgICAgc3lzdGVtLmFwaS5wcm9maWxlc0N0bCAtPiBzeXN0ZW0uYXBpLnRyYW5zZm9ybWVyICJTZXJpYWxpemEiCiAgICAgICAgc3lzdGVtLmFwaS51c2Vyc0N0bCAtPiBzeXN0ZW0uYXBpLnVzZXJNb2RlbCAiQ29uc3VsdGEiCiAgICAgICAgc3lzdGVtLmFwaS51c2Vyc0N0bCAtPiBzeXN0ZW0uYXBpLnRyYW5zZm9ybWVyICJTZXJpYWxpemEiCiAgICAgICAgc3lzdGVtLmFwaS5uZXdBY2NvdW50c0N0bCAtPiBzeXN0ZW0uYXBpLnRyYW5zZm9ybWVyICJTZXJpYWxpemEiCiAgICAgICAgc3lzdGVtLmFwaS5hY2Nlc3NUb2tlbnNDdGwgLT4gc3lzdGVtLmFwaS50cmFuc2Zvcm1lciAiU2VyaWFsaXphIgogICAgICAgIHN5c3RlbS5hcGkudXNlck1vZGVsIC0+IHN5c3RlbS5kYiAiTGVlIHkgZXNjcmliZSIgIkx1Y2lkIC8gU1FMIgogICAgfQoKICAgIHZpZXdzIHsKICAgICAgICBzeXN0ZW1Db250ZXh0IHN5c3RlbSAiQ29udGV4dCIgIkM0IG5pdmVsIDE6IGNvbnRleHRvIGRlbCBzaXN0ZW1hLiIgewogICAgICAgICAgICBpbmNsdWRlICoKICAgICAgICAgICAgYXV0b2xheW91dCBscgogICAgICAgIH0KCiAgICAgICAgY29udGFpbmVyIHN5c3RlbSAiQ29udGFpbmVycyIgIkM0IG5pdmVsIDI6IGNvbnRlbmVkb3Jlcy4iIHsKICAgICAgICAgICAgaW5jbHVkZSAqCiAgICAgICAgICAgIGF1dG9sYXlvdXQgbHIKICAgICAgICB9CgogICAgICAgIGNvbXBvbmVudCBzeXN0ZW0uYXBpICJDb21wb25lbnRzIiAiQzQgbml2ZWwgMzogY29tcG9uZW50ZXMgZGVsIEJhY2tlbmQgQVBJLiIgewogICAgICAgICAgICBpbmNsdWRlICoKICAgICAgICAgICAgZXhjbHVkZSBzeXN0ZW0uc3BhCiAgICAgICAgICAgIGF1dG9sYXlvdXQgdGIKICAgICAgICB9CgogICAgICAgIHN0eWxlcyB7CiAgICAgICAgICAgIGVsZW1lbnQgIlBlcnNvbiIgewogICAgICAgICAgICAgICAgc2hhcGUgUGVyc29uCiAgICAgICAgICAgICAgICBiYWNrZ3JvdW5kICMwODQyN2IKICAgICAgICAgICAgICAgIGNvbG9yICNmZmZmZmYKICAgICAgICAgICAgfQogICAgICAgICAgICBlbGVtZW50ICJTb2Z0d2FyZSBTeXN0ZW0iIHsKICAgICAgICAgICAgICAgIGJhY2tncm91bmQgIzExNjhiZAogICAgICAgICAgICAgICAgY29sb3IgI2ZmZmZmZgogICAgICAgICAgICB9CiAgICAgICAgICAgIGVsZW1lbnQgIkNvbnRhaW5lciIgewogICAgICAgICAgICAgICAgYmFja2dyb3VuZCAjNDM4ZGQ1CiAgICAgICAgICAgICAgICBjb2xvciAjZmZmZmZmCiAgICAgICAgICAgIH0KICAgICAgICAgICAgZWxlbWVudCAiQ29tcG9uZW50IiB7CiAgICAgICAgICAgICAgICBiYWNrZ3JvdW5kICM4NWJiZjAKICAgICAgICAgICAgICAgIGNvbG9yICMwMDAwMDAKICAgICAgICAgICAgfQogICAgICAgICAgICBlbGVtZW50ICJEYXRhYmFzZSIgewogICAgICAgICAgICAgICAgc2hhcGUgQ3lsaW5kZXIKICAgICAgICAgICAgfQogICAgICAgICAgICBlbGVtZW50ICJXZWIgQnJvd3NlciIgewogICAgICAgICAgICAgICAgc2hhcGUgV2ViQnJvd3NlcgogICAgICAgICAgICB9CiAgICAgICAgfQogICAgfQp9",
+    "structurizr.inspection.info" : "0",
+    "structurizr.inspection.ignore" : "0",
+    "structurizr.inspection.warning" : "0"
+  },
+  "views" : {
+    "componentViews" : [ {
+      "automaticLayout" : {
+        "edgeSeparation" : 50,
+        "nodeSeparation" : 50,
+        "rankDirection" : "TopBottom",
+        "rankSeparation" : 100,
+        "vertices" : true
+      },
+      "containerId" : "4",
+      "description" : "C4 nivel 3: componentes del Backend API.",
+      "elements" : [ {
+        "id" : "5",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "6",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "7",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "8",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "9",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "10",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "11",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "12",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "13",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "14",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "15",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "16",
+        "x" : 0,
+        "y" : 0
+      } ],
+      "externalContainerBoundariesVisible" : false,
+      "key" : "Components",
+      "name" : "Component View: Starter Kit Full-stack - Backend API",
+      "order" : 3,
+      "relationships" : [ {
+        "id" : "22"
+      }, {
+        "id" : "23"
+      }, {
+        "id" : "24"
+      }, {
+        "id" : "25"
+      }, {
+        "id" : "26"
+      }, {
+        "id" : "27"
+      }, {
+        "id" : "28"
+      }, {
+        "id" : "29"
+      }, {
+        "id" : "30"
+      }, {
+        "id" : "31"
+      }, {
+        "id" : "32"
+      }, {
+        "id" : "33"
+      }, {
+        "id" : "34"
+      }, {
+        "id" : "35"
+      }, {
+        "id" : "36"
+      }, {
+        "id" : "37"
+      }, {
+        "id" : "38"
+      }, {
+        "id" : "39"
+      } ]
+    } ],
+    "configuration" : {
+      "styles" : {
+        "elements" : [ {
+          "background" : "#85bbf0",
+          "color" : "#000000",
+          "tag" : "Component"
+        }, {
+          "background" : "#438dd5",
+          "color" : "#ffffff",
+          "tag" : "Container"
+        }, {
+          "shape" : "Cylinder",
+          "tag" : "Database"
+        }, {
+          "background" : "#08427b",
+          "color" : "#ffffff",
+          "shape" : "Person",
+          "tag" : "Person"
+        }, {
+          "background" : "#1168bd",
+          "color" : "#ffffff",
+          "tag" : "Software System"
+        }, {
+          "shape" : "WebBrowser",
+          "tag" : "Web Browser"
+        } ]
+      },
+      "terminology" : { }
+    },
+    "containerViews" : [ {
+      "automaticLayout" : {
+        "edgeSeparation" : 50,
+        "nodeSeparation" : 50,
+        "rankDirection" : "LeftRight",
+        "rankSeparation" : 100,
+        "vertices" : true
+      },
+      "description" : "C4 nivel 2: contenedores.",
+      "elements" : [ {
+        "id" : "1",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "3",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "4",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "16",
+        "x" : 0,
+        "y" : 0
+      } ],
+      "externalSoftwareSystemBoundariesVisible" : false,
+      "key" : "Containers",
+      "name" : "Container View: Starter Kit Full-stack",
+      "order" : 2,
+      "relationships" : [ {
+        "id" : "17"
+      }, {
+        "id" : "19"
+      }, {
+        "id" : "20"
+      } ],
+      "softwareSystemId" : "2"
+    } ],
+    "systemContextViews" : [ {
+      "automaticLayout" : {
+        "edgeSeparation" : 50,
+        "nodeSeparation" : 50,
+        "rankDirection" : "LeftRight",
+        "rankSeparation" : 100,
+        "vertices" : true
+      },
+      "description" : "C4 nivel 1: contexto del sistema.",
+      "elements" : [ {
+        "id" : "1",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "2",
+        "x" : 0,
+        "y" : 0
+      } ],
+      "enterpriseBoundaryVisible" : true,
+      "key" : "Context",
+      "name" : "System Context View: Starter Kit Full-stack",
+      "order" : 1,
+      "relationships" : [ {
+        "id" : "18"
+      } ],
+      "softwareSystemId" : "2"
+    } ]
+  }
+}

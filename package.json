@@ -1,0 +1,19 @@
+{
+  "scripts": {
+    "vale:sync": "vale sync",
+    "lint:docs": "vale docs/ README.md"
+  },
+  "devDependencies": {
+    "log4brains": "^1.1.0",
+    "typedoc": "^0.28.20"
+  },
+  "allowScripts": {
+    "core-js@3.51.0": true,
+    "@vvago/vale@3.25.1": true
+  },
+  "dependencies": {
+    "@vvago/vale": "^3.25.1",
+    "adonis-autoswagger": "^3.73.0",
+    "markdownlint-cli2": "^0.24.0"
+  }
+}

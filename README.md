@@ -56,6 +56,49 @@ Abre `http://localhost:5173`, regístrate, entra al dashboard y cierra sesión.
 
 > El endpoint `GET /api/v1/users/active` se implementa en vivo en la Sesión 3.
 
+## Arquitectura
+
+Modelos Lucid, sus relaciones y los grupos de endpoints REST del backend (`/api/v1`).
+
+```mermaid
+graph LR
+    subgraph Public["Públicos (sin auth)"]
+        H["Health<br/>GET /health"]
+        A["Account<br/>POST /account/register<br/>POST /account/login"]
+    end
+
+    subgraph Protected["Protegidos · middleware.auth() (Bearer)"]
+        AP["Account<br/>POST /account/logout<br/>GET /account/profile"]
+        U["Users<br/>GET /users<br/>GET /users/:id"]
+    end
+
+    subgraph Controllers["Controllers"]
+        HC[HealthController]
+        NAC[NewAccountsController]
+        ATC[AccessTokensController]
+        PC[ProfilesController]
+        UC[UsersController]
+    end
+
+    subgraph Models["Modelos Lucid"]
+        User["User<br/>id · fullName · email<br/>password · lastSeenAt<br/>createdAt · updatedAt"]
+        Token[("auth_access_tokens<br/>DbAccessTokensProvider")]
+    end
+
+    H --> HC
+    A -->|register| NAC
+    A -->|login| ATC
+    AP -->|logout| ATC
+    AP -->|profile| PC
+    U --> UC
+
+    NAC -->|crea| User
+    ATC -->|emite / revoca| Token
+    PC -->|lee| User
+    UC -->|lee| User
+    User -->|"1 : N (accessTokens)"| Token
+```
+
 ## Workflow con OpenSpec
 
 Flujo spec-driven con Claude Code o Cursor:

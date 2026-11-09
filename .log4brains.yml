@@ -1,0 +1,11 @@
+project:
+  name: Candidate Tracking List
+  tz: Europe/Madrid
+  adrFolder: ./docs/adr
+  packages:
+    - name: backend
+      path: ./backend
+      adrFolder: ./backend/docs/adr
+    - name: frontend
+      path: ./frontend
+      adrFolder: ./frontend/docs/adr
